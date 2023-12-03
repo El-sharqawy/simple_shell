@@ -1,3 +1,5 @@
-# Simple Shell Project by Osama Elsharqawy
+# Simple Shell Project
+
+by Osama Elsharqawy
 
 ## Introduction
