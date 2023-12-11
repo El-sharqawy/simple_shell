@@ -5,8 +5,11 @@
  * Description: runs the shell loop.
  * Return: Always 0 (Success)
  */
-int main(void)
+int main(int argc, char *argv[], char *env[])
 {
-	run_shell();
+	(void)argc;
+	(void)argv;
+
+	run_shell(env);
 	return (0);
 }
