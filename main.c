@@ -1,18 +1,69 @@
-#include "main.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
 
 /**
- * main - Entry Point
- * @argc: number of arguments
- * @argv: an input arguments
- * @env: an input environments
- * Description: runs the shell loop.
- * Return: Always 0 (Success)
+ * executeCommand - function to execute commands
+ * @command: an input string to execute
+ * Return: executing results.
  */
-int main(int argc, char *argv[], char *env[])
+int executeCommand(const char *command)
 {
-	(void)argc;
-	(void)argv;
+	int result;
 
-	run_shell(env);
-	return (0);
+	result = system(command);
+	return (result);
+}
+
+/**
+ * print_shell - print shell function
+ * @isInt: is interactive
+ * Return: Nothing.
+ */
+void print_shell(int isInt)
+{
+	if (isInt)
+	{
+		fprintf(stdout, "#simple_shell$ ");
+		fflush(stdout);
+	}
+}
+
+/**
+ * main - Entry point
+ * Return: ALways 0 (Success)
+ */
+int main(void)
+{
+	char input[512];
+	size_t len = 0;
+	int isInteractive = isatty(STDIN_FILENO);
+
+	while (1)
+	{
+		if (isInteractive)
+			print_shell(isInteractive);
+		if (fgets(input, sizeof(input), stdin) == NULL)
+		{
+			if (feof(stdin))
+			{
+				break;
+			}
+			else
+			{
+				perror("fgets");
+				exit(EXIT_FAILURE);
+				break;
+			}
+		}
+		len = strlen(input);
+		if (len > 0 && input[len - 1] == '\n')
+		{
+			input[len - 1] = '\0';
+		}
+		if (strcmp(input, "exit") == 0)
+			break;
+		executeCommand(input);
+	}
+	return (0)
 }

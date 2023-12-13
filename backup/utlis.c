@@ -46,13 +46,10 @@ int tokenizeInput(char *input, char *args[])
 void execute_command(char *args[], char *env[], int *status)
 {
 	pid_t pid;
-	char path[256];
-	char *prefix = "/bin/";
 
-	strcpy(path, "/bin/");
-	strcat(path, args[0]);
 	if (args[0] == NULL || args[0][0] == '\0')
 		return;
+
 	pid = fork();
 	if (pid == -1)
 	{
@@ -62,25 +59,10 @@ void execute_command(char *args[], char *env[], int *status)
 	}
 	else if (!pid)
 	{
-		if (!strcmp(args[0], "ls"))
-		{
-			if (execve("/bin/ls", args, env) == -1)
-			{
-				*status = EXIT_FAILURE;
-				fprintf(stderr, "./hsh: %d: %s: not found\n", 1, args[0]);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			if (strncmp(args[0], prefix, strlen(prefix)) == 0)
-				execve(args[0], args, env);
-			else
-				execve(path, args, env);
-			*status = EXIT_FAILURE;
-			fprintf(stderr, "./hsh: %d: %s: not found\n", 1, args[0]);
-			exit(EXIT_FAILURE);
-		}
+		execvp(args[0], args);
+		*status = EXIT_FAILURE;
+		fprintf(stderr, "./hsh: %d: %s: not found\n", 1, args[0]);
+		exit(EXIT_FAILURE);
 	}
 	else
 		waitpid(pid, status, 0);
