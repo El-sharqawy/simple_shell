@@ -28,7 +28,8 @@ void execute_command(char *args[], char *env[], int *status)
 {
 	pid_t pid = fork();
 	char path[256];
-	char *prefix = "/bin/";
+	/* char *prefix = "/bin/"; */
+	static int count;
 
 	strcpy(path, "/bin/");
 	strcat(path, args[0]);
@@ -46,18 +47,34 @@ void execute_command(char *args[], char *env[], int *status)
 	}
 	else if (!pid)
 	{
-		if (strncmp(args[0], prefix, strlen(prefix)) == 0)
-			execve(args[0], args, env);
+		if (!strcmp(args[0], "ls"))
+		{
+			if (execve("/bin/ls", args, env) == -1)
+			{
+				*status = EXIT_FAILURE, count++;
+				fprintf(stderr, "./hsh: %d: %s: not found\n", count, args[0]);
+				exit(EXIT_FAILURE);
+			}
+		}
 		else
-			execve(path, args, env);
-		/* execvp(args[0], args); */
-		*status = EXIT_FAILURE;
-		fprintf(stderr, "./hsh: %d: %s: not found\n", *status, args[0]);
-		exit(EXIT_FAILURE);
+		{
+			/*if (strncmp(args[0], prefix, strlen(prefix)) == 0)
+				execve(args[0], args, env);
+			else
+				execve(path, args, env);*/
+			execvp(args[0], args);
+			*status = EXIT_FAILURE, count++;
+			fprintf(stderr, "./hsh: %d: %s: not found\n", count, args[0]);
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
 		waitpid(pid, status, 0);
+		if (WIFEXITED(*status))
+			*status = WEXITSTATUS(*status);
+		else
+			*status = EXIT_FAILURE;
 	}
 }
 

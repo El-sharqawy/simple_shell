@@ -24,7 +24,6 @@ typedef unsigned long int uint64_t;
 extern char **environ;
 
 void run_shell(char *env[]);
-void shell_work(char *args[], char *env[]);
 int tokenizeInput(char *input, char *args[]);
 void strip_line(char *str);
 void strip_spaces(char *str);
@@ -32,5 +31,6 @@ void execute_command(char *args[], char *env[], int *status);
 void exit_shell(int status);
 void print_environments(char *env[]);
 void change_dir(char *args[]);
+void interActiveExecute();
 
 #endif /* __MAIN_H__ */

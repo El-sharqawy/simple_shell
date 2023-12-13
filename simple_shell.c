@@ -18,6 +18,11 @@ void strip_spaces(char *str)
 	str[end + 1] = '\0';
 }
 
+void interActiveExecute()
+{
+	fprintf(stdout, "#simple_shell$ ");
+	fflush(stdout);
+}
 /**
  * run_shell - Run and Loop the shell.
  * Return: Nothing.
@@ -25,15 +30,12 @@ void strip_spaces(char *str)
 void run_shell(char *env[])
 {
 	char input[BUFFER_SIZE], *args[ARGS_MAX];
-	int iTokenized = 0, isInteractive = isatty(STDIN_FILENO);
+	int iTokenized = 0, status = 0, isInteractive = isatty(STDIN_FILENO);
 
 	while (1)
 	{
 		if (isInteractive)
-		{
-			fprintf(stdout, "#simple_shell$ ");
-			fflush(stdout);
-		}
+			interActiveExecute();
 
 		if (fgets(input, sizeof(input), stdin) == NULL)
 		{
@@ -48,31 +50,21 @@ void run_shell(char *env[])
 		}
 		strip_spaces(input);
 		strip_line(input);
-		if (input[0] == '\0')
+		if (!strcmp(input, "exit") || !strcmp(input, "quit"))
+		{
+			exit_shell(status);
+			break;
+		}
+		if (strcmp(input, "env") == 0)
+		{
+			print_environments(env);
 			continue;
+		}
+
 		iTokenized = tokenizeInput(input, args);
 
 		if (iTokenized > 0)
-		{
-			args[iTokenized] = NULL;
-			shell_work(args, env);
-		}
+			execute_command(args, env, &status);
 	}
 
-}
-
-void shell_work(char *args[], char *env[])
-{
-	int status = 0;
-
-	if (!strcmp(args[0], "exit") || !strcmp(args[0], "quit"))
-		exit_shell(status);
-	else if (strcmp(args[0], "env") == 0)
-		print_environments(env);
-	else if (strcmp(args[0], "cd") == 0)
-		change_dir(args);
-	else
-	{
-		execute_command(args, env, &status);
-	}
 }
