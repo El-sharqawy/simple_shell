@@ -36,7 +36,7 @@ void print_shell(int isInt)
  */
 int main(void)
 {
-	char input[512];
+	char input[2048];
 	size_t len = 0;
 	int isInteractive = isatty(STDIN_FILENO);
 
