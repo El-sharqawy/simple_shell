@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 /**
  * executeCommand - function to execute commands
@@ -65,5 +66,5 @@ int main(void)
 			break;
 		executeCommand(input);
 	}
-	return (0)
+	return (0);
 }
