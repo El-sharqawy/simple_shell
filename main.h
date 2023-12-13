@@ -31,6 +31,6 @@ void execute_command(char *args[], char *env[], int *status);
 void exit_shell(int status);
 void print_environments(char *env[]);
 void change_dir(char *args[]);
-void interActiveExecute(void);
+void interActiveExecute(int interactive);
 
 #endif /* __MAIN_H__ */

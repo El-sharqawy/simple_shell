@@ -44,7 +44,7 @@ void run_shell(char *env[])
 	while (1)
 	{
 		if (isInteractive)
-			interActiveExecute();
+			interActiveExecute(isInteractive);
 
 		if (fgets(input, sizeof(input), stdin) == NULL)
 		{
