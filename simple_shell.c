@@ -18,13 +18,22 @@ void strip_spaces(char *str)
 	str[end + 1] = '\0';
 }
 
-void interActiveExecute()
+/**
+ * interActiveExecute - function to print shell mark
+ * @interactive: an input integer to check if interactive.
+ * Return: Nothing.
+ */
+void interActiveExecute(int interactive)
 {
-	fprintf(stdout, "#simple_shell$ ");
-	fflush(stdout);
+	if (interactive)
+	{
+		fprintf(stdout, "#simple_shell$ ");
+		fflush(stdout);
+	}
 }
 /**
  * run_shell - Run and Loop the shell.
+ * @env: an input enironment vars
  * Return: Nothing.
  */
 void run_shell(char *env[])
@@ -40,13 +49,15 @@ void run_shell(char *env[])
 		if (fgets(input, sizeof(input), stdin) == NULL)
 		{
 			if (feof(stdin))
+			{
 				break;
+			}
 			else
 			{
 				perror("fgets");
 				exit(EXIT_FAILURE);
-				break;
 			}
+			break;
 		}
 		strip_spaces(input);
 		strip_line(input);

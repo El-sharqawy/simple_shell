@@ -2,6 +2,9 @@
 
 /**
  * main - Entry Point
+ * @argc: number of arguments
+ * @argv: an input arguments
+ * @env: an input environments
  * Description: runs the shell loop.
  * Return: Always 0 (Success)
  */

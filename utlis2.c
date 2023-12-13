@@ -1,5 +1,10 @@
 #include "main.h"
 
+/**
+ * change_dir - function to change direction
+ * @args: an input arguments.
+ * Return: Nothing.
+ */
 void change_dir(char *args[])
 {
 	if (args[1] == NULL)
@@ -9,13 +14,18 @@ void change_dir(char *args[])
 			perror("chdir");
 }
 
+/**
+ * print_environments - a function to print environments
+ * @env: an input environments variables
+ * Return: Nothing.
+ */
 void print_environments(char *env[])
 {
-	int i = 0;
+	int32_t i = 0;
 
 	while (env[i] != NULL)
 	{
 		printf("%s\n", env[i]);
 		i++;
 	}
-}	
+}

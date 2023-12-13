@@ -1,12 +1,24 @@
 #include "main.h"
 
+/**
+ * strip_line - function to strip new line
+ * @str: an input string to strip.
+ * Return: Nothing.
+ */
 void strip_line(char *str)
 {
 	size_t len = strlen(str);
+
 	if (len > 0 && str[len - 1] == '\n')
 		str[len - 1] = '\0'; /* Replace the newline with null term */
 }
 
+/**
+ * tokenizeInput - function to tokenize input before executing it
+ * @input: an input character
+ * @args: an input string
+ * Return: tokens count.
+ */
 int tokenizeInput(char *input, char *args[])
 {
 	char *token;
@@ -24,20 +36,20 @@ int tokenizeInput(char *input, char *args[])
 	return (tokenCount);
 }
 
+/**
+ * execute_command - function to execute shell commands
+ * @args: an input argument
+ * @env: an input environments
+ * @status: an input status
+ * Return: Nothing.
+ */
 void execute_command(char *args[], char *env[], int *status)
 {
 	pid_t pid = fork();
-	char path[256];
-	/* char *prefix = "/bin/"; */
-	static int count;
 
-	strcpy(path, "/bin/");
-	strcat(path, args[0]);
-
+	(void)env;
 	if (args[0] == NULL || args[0][0] == '\0')
-	{
 		return;
-    	}
 
 	if (pid == -1)
 	{
@@ -47,37 +59,20 @@ void execute_command(char *args[], char *env[], int *status)
 	}
 	else if (!pid)
 	{
-		if (!strcmp(args[0], "ls"))
-		{
-			if (execve("/bin/ls", args, env) == -1)
-			{
-				*status = EXIT_FAILURE, count++;
-				fprintf(stderr, "./hsh: %d: %s: not found\n", count, args[0]);
-				exit(EXIT_FAILURE);
-			}
-		}
-		else
-		{
-			/*if (strncmp(args[0], prefix, strlen(prefix)) == 0)
-				execve(args[0], args, env);
-			else
-				execve(path, args, env);*/
-			execvp(args[0], args);
-			*status = EXIT_FAILURE, count++;
-			fprintf(stderr, "./hsh: %d: %s: not found\n", count, args[0]);
-			exit(EXIT_FAILURE);
-		}
+		execvp(args[0], args);
+		*status = EXIT_FAILURE;
+		fprintf(stderr, "./hsh: %d: %s: not found\n", 1, args[0]);
+		exit(EXIT_FAILURE);
 	}
 	else
-	{
 		waitpid(pid, status, 0);
-		if (WIFEXITED(*status))
-			*status = WEXITSTATUS(*status);
-		else
-			*status = EXIT_FAILURE;
-	}
 }
 
+/**
+ * exit_shell - function to exit the shell.
+ * @status: exit status
+ * Return: Nothing.
+ */
 void exit_shell(int status)
 {
 	if (status == 0)
